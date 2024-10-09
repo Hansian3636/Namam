@@ -1,0 +1,55 @@
+import random
+
+class Hamster:
+    def __init__(self, name, health, attacks):
+        self.name = name
+        self.health = health
+        self.attacks = attacks
+
+    def attack(self, other_hamster, attack_name):
+        attack_damage = self.attacks[attack_name]
+        other_hamster.health -= attack_damage
+        print(f"{self.name} uses {attack_name} on {other_hamster.name} for {attack_damage} damage!")
+
+    def is_alive(self):
+        return self.health > 0
+
+def game_loop(hamster1, hamster2):
+    while hamster1.is_alive() and hamster2.is_alive():
+        # Hamster 1's turn
+        print(f"{hamster1.name}'s turn!")
+        print("Available attacks:")
+        for i, attack in enumerate(hamster1.attacks):
+            print(f"{i+1}. {attack} ({hamster1.attacks[attack]} damage)")
+        attack_choice = int(input("Enter the number of your chosen attack: "))
+        attack_name = list(hamster1.attacks.keys())[attack_choice - 1]
+        hamster1.attack(hamster2, attack_name)
+
+        # Check if Hamster 2 is still alive
+        if not hamster2.is_alive():
+            break
+
+        # Hamster 2's turn
+        print(f"{hamster2.name}'s turn!")
+        attack_name = random.choice(list(hamster2.attacks.keys()))
+        hamster2.attack(hamster1, attack_name)
+
+    if hamster1.is_alive():
+        print(f"{hamster1.name} wins!")
+    else:
+        print(f"{hamster2.name} wins!")
+
+# Create the hamsters
+elontoken = Hamster("ElonToken", 120, {
+    "Crypto Crush": 25,
+    "Blockchain Blast": 30,
+    "Token Takedown": 40
+})
+tra = Hamster("Tra", 100, {
+    "Hamster Wheel": 15,
+    "Cheese Chomp": 25,
+    "Furry Fury": 35
+})
+
+# Start the game
+game_loop(elontoken, tra)
